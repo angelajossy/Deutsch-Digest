@@ -1,6 +1,6 @@
 import streamlit as st
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
-from googletrans import Translator
+from deep_translator import GoogleTranslator  # <--- NEW LIBRARY
 
 # --- PAGE CONFIGURATION ---
 st.set_page_config(
@@ -32,11 +32,11 @@ st.markdown("""
         color: white;
         border-radius: 8px;
         border: none;
-        padding: 12px 28px; /* Increased padding for a bigger look */
+        padding: 12px 28px;
         font-weight: bold;
         font-size: 16px;
-        white-space: nowrap; /* <--- THIS FIXES THE TEXT WRAPPING */
-        min-width: 200px;    /* <--- THIS MAKES THE BUTTON LONG & SLEEK */
+        white-space: nowrap;
+        min-width: 200px;
         transition: all 0.3s ease;
     }
     div.stButton > button:first-child:hover {
@@ -72,7 +72,6 @@ def load_model():
 
 try:
     tokenizer, model = load_model()
-    translator = Translator()
     model_loaded = True
 except Exception as e:
     st.error(f"Error loading model: {e}")
@@ -102,7 +101,6 @@ text_input = st.text_area(
 )
 
 # Button Columns
-# UPDATED RATIO: [2, 5] gives the first button more space so it won't squeeze
 col_btn1, col_btn2 = st.columns([2, 5])
 
 with col_btn1:
@@ -133,9 +131,8 @@ if summarize_btn:
                 
                 summary_de = tokenizer.decode(output_ids[0], skip_special_tokens=True)
                 
-                # B. TRANSLATE
-                translation = translator.translate(summary_de, src='de', dest='en')
-                summary_en = translation.text
+                # B. TRANSLATE (UPDATED TO USE DEEP-TRANSLATOR)
+                summary_en = GoogleTranslator(source='de', target='en').translate(summary_de)
                 
                 # C. DISPLAY RESULTS
                 st.markdown("---")
@@ -144,7 +141,7 @@ if summarize_btn:
                 with col1:
                     st.markdown("### German Summary")
                     st.success(summary_de)
-                    
+                
                 with col2:
                     st.markdown("### English Verification")
                     st.info(summary_en)
