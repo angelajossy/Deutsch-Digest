@@ -2,5 +2,4 @@ streamlit
 transformers
 torch
 sentencepiece
-googletrans==4.0.0-rc1
-httpx==0.13.3
+deep-translator
