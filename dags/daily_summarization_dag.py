@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-# Mock imports so this runs without installing heavy Airflow libraries locally
+
 try:
     from airflow import DAG
     from airflow.operators.python import PythonOperator
@@ -14,20 +14,20 @@ except ImportError:
         def __init__(self, task_id, python_callable, dag): pass
         def __rshift__(self, other): return other
 
-# --- 1. DEFINE TASKS ---
+
 def fetch_daily_news():
-    print("🌍 Connecting to German News API...")
+    print("Connecting to German News API...")
     return "Extraction Complete"
 
 def preprocess_text():
-    print("🧹 Cleaning text data...")
+    print("Cleaning text data...")
     return "Processing Complete"
 
 def retrain_model():
-    print("🧠 Starting Transfer Learning on new data...")
+    print("Starting Transfer Learning on new data...")
     return "Training Complete"
 
-# --- 2. DEFINE DAG ---
+
 default_args = {
     'owner': 'Deutsch-Digest-Admin',
     'retries': 2,
