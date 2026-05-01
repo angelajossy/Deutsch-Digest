@@ -18,9 +18,7 @@ class SimpleDataset(torch.utils.data.Dataset):
         }
 
 def process_data(df):
-    """
-    Tokenizes the dataframe text and summary.
-    """
+   
     print("[Preprocessing] Tokenizing data...")
     
     inputs = tokenizer(
