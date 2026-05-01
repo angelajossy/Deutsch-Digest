@@ -1,8 +1,8 @@
 import streamlit as st
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
-from deep_translator import GoogleTranslator  # <--- NEW LIBRARY
+from deep_translator import GoogleTranslator  
 
-# --- PAGE CONFIGURATION ---
+
 st.set_page_config(
     page_title="Deutsch-Digest",
     page_icon="🇩🇪",
@@ -10,7 +10,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# --- CUSTOM CSS FOR UI ---
+
 st.markdown("""
 <style>
     /* Main Background gradient */
@@ -61,7 +61,7 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# --- MODEL LOADING ---
+
 MODEL_REPO = "Einmalumdiewelt/T5-Base_GNAD"
 
 @st.cache_resource
@@ -77,22 +77,22 @@ except Exception as e:
     st.error(f"Error loading model: {e}")
     model_loaded = False
 
-# --- SESSION STATE ---
+
 if 'input_text' not in st.session_state:
     st.session_state.input_text = ""
 
 def clear_text():
     st.session_state.input_text = ""
 
-# --- SIDEBAR ---
+
 with st.sidebar:
     st.image("https://upload.wikimedia.org/wikipedia/en/thumb/b/ba/Flag_of_Germany.svg/1200px-Flag_of_Germany.svg.png", width=60)
     st.title("Deutsch-Digest")
 
-# --- MAIN INTERFACE ---
+
 st.title("German Summarizer")
 
-# Input Area
+
 text_input = st.text_area(
     "Input German Text", 
     height=250, 
@@ -100,7 +100,7 @@ text_input = st.text_area(
     placeholder="Paste here"
 )
 
-# Button Columns
+
 col_btn1, col_btn2 = st.columns([2, 5])
 
 with col_btn1:
@@ -112,7 +112,7 @@ if summarize_btn:
     if text_input and model_loaded:
         with st.spinner('Generating summary...'):
             try:
-                # A. GENERATE
+                
                 input_ids = tokenizer(
                     "summarize: " + text_input,
                     return_tensors="pt",
@@ -131,10 +131,10 @@ if summarize_btn:
                 
                 summary_de = tokenizer.decode(output_ids[0], skip_special_tokens=True)
                 
-                # B. TRANSLATE (UPDATED TO USE DEEP-TRANSLATOR)
+                
                 summary_en = GoogleTranslator(source='de', target='en').translate(summary_de)
                 
-                # C. DISPLAY RESULTS
+                
                 st.markdown("---")
                 col1, col2 = st.columns(2)
                 
